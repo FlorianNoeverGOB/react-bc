@@ -1,0 +1,1 @@
+Utility functions, constants and helpers that are used across the app go here.
