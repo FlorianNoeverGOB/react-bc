@@ -1,14 +1,14 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const package = require('./package.json');
-const TerserPlugin = require('terser-webpack-plugin');
+const packageJson = require('./package.json');
+
 
 module.exports = {
     entry: './src/index.tsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: `${package.name}.bundle.js`,
-        clean: true,
-        publicPath: ''
+        filename: `${packageJson.name}.bundle.js`,
+        clean: true
     },
     module: {
         rules: [
@@ -40,31 +40,11 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                type: 'asset/source'
-            }
+                use: ['html-loader'],
+            },
         ]
-    },
-    optimization: {
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                terserOptions: {
-                    keep_classnames: true,
-                    keep_fnames: true,
-                },
-                parallel: true,
-            }),
-        ],
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js', '.jsx']
     },
-    devServer: {
-        static: {
-            directory: path.join(__dirname, 'public'),
-        },
-        port: 3000,
-        hot: true,
-        open: true
-    }
 };
