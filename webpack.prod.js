@@ -2,9 +2,15 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const TerserPlugin = require('terser-webpack-plugin');
+const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 
 module.exports = merge(common, {
     mode: 'production',
+    plugins: [
+        new LicenseWebpackPlugin({
+            outputFilename: 'licenses.txt',
+        }),
+    ],
     optimization: {
         minimize: true,
         minimizer: [
