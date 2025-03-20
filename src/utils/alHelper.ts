@@ -1,40 +1,53 @@
 /**
  * Helper class for invoking AL events and making functions accessible in AL.
  */
-export default class ALHelper {
+export default class {
 
     /**
-     * Invokes an AL event with the specified event name. Optionally, data can be passed to the event,
-     * and the invocation can be skipped if the NAV environment is busy.
+     * Invokes an AL event with the specified event name. Optionally, data can be passed to the event.
      *
      * @param {string} eventName - The name of the AL event to invoke.
      */
     static invokeEvent(eventName: string): void;
 
     /**
-     * Invokes an AL event with the specified event name. Optionally, data can be passed to the event,
-     * and the invocation can be skipped if the NAV environment is busy.
+     * Invokes an AL event with the specified event name. Optionally, data can be passed to the event.
      *
      * @param {string} eventName - The name of the AL event to invoke.
      * @param {any[]} [data] - Optional array of arguments to pass to the AL event.
      */
-    static invokeEvent(eventName: string, data: any[]): void;
+    static invokeEvent(eventName: string, ...data: unknown[]): void;
+
+    static invokeEvent(eventName: string, ...data: unknown[]): void {
+        if (data && data.length != 0) {
+            this.getALMethod(eventName, false)(...data); // Call the AL method with the given name and data
+        } else {
+            this.getALMethod(eventName, false)(); // Call the AL method with the given name without data
+        }
+    }
 
     /**
      * Invokes an AL event with the specified event name. Optionally, data can be passed to the event,
-     * and the invocation can be skipped if the NAV environment is busy.
+     * and the invocation will be skipped if the NAV environment is busy.
+     *
+     * @param {string} eventName - The name of the AL event to invoke.
+     */
+    static invokeEventSkipBusy(eventName: string): void;
+
+    /**
+     * Invokes an AL event with the specified event name. Optionally, data can be passed to the event,
+     * and the invocation will be skipped if the NAV environment is busy.
      *
      * @param {string} eventName - The name of the AL event to invoke.
      * @param {any[]} [data] - Optional array of arguments to pass to the AL event.
-     * @param {boolean} [skipIfBusy=false] - Optional flag to skip invocation if the NAV environment is busy.
      */
-    static invokeEvent(eventName: string, data: any[], skipIfBusy: boolean): void;
+    static invokeEventSkipBusy(eventName: string, ...data: unknown[]): void;
 
-    static invokeEvent(eventName: string, data?: any[], skipIfBusy: boolean = false) {
+    static invokeEventSkipBusy(eventName: string, ...data: unknown[]): void {
         if (data && data.length != 0) {
-            ALHelper.getALMethod(eventName, skipIfBusy)(...data); // Call the AL method with the given name and data
+            this.getALMethod(eventName, true)(...data); // Call the AL method with the given name and data
         } else {
-            ALHelper.getALMethod(eventName, skipIfBusy)(); // Call the AL method with the given name without data
+            this.getALMethod(eventName, true)(); // Call the AL method with the given name without data
         }
     }
 
@@ -47,20 +60,20 @@ export default class ALHelper {
      * @template T
      * @param {string} name - The name of the AL method to retrieve.
      * @param {T} SKIP_IF_BUSY - A value to resolve the promise with if the NAV environment is busy.
-     * @returns {(...args: any[]) => Promise<T | any>} A function that, when invoked, will execute the AL method.
+     * @returns {(...args: unknown[]) => Promise<T | unknown>} A function that, when invoked, will execute the AL method.
      */
-    private static getALMethod<T>(name: string, SKIP_IF_BUSY: T): (...args: any[]) => Promise<T | any> {
-        const nav = (window as any).Microsoft.Dynamics.NAV.GetEnvironment(); // Get the NAV environment
+    private static getALMethod<T>(name: string, SKIP_IF_BUSY: T): (...args: unknown[]) => Promise<T | unknown> {
+        const nav = window.Microsoft.Dynamics.NAV.GetEnvironment();
 
-        return (...args: any[]): Promise<T | any> => {
-            let result: any;
+        return (...args: unknown[]): Promise<T | unknown> => {
+            let result: unknown;
 
             // Define the OnInvokeResult event handler
-            (window as any)["OnInvokeResult"] = function (alResult: any) {
+            window.OnInvokeResult = function (alResult: unknown) {
                 result = alResult;
-            }
+            };
 
-            return new Promise<T | any>(resolve => {
+            return new Promise<T | unknown>(resolve => {
                 // If nav is busy and skip if busy is true: return SKIP_IF_BUSY
                 if (SKIP_IF_BUSY && nav.Busy) {
                     resolve(SKIP_IF_BUSY);
@@ -68,12 +81,12 @@ export default class ALHelper {
                 }
 
                 // Invoke the AL method with the given name and arguments
-                (window as any).Microsoft.Dynamics.NAV.InvokeExtensibilityMethod(name, args, false, () => {
-                    delete (window as any).OnInvokeResult;
+                window.Microsoft.Dynamics.NAV.InvokeExtensibilityMethod(name, args, false, () => {
+                    delete window.OnInvokeResult;
                     resolve(result);
                 });
             });
-        }
+        };
     }
 
     /**
@@ -82,9 +95,10 @@ export default class ALHelper {
      *
      * @param {Function} func - The function to make accessible in AL.
      */
-    static makeFunctionAccessible(func: Function) {
+    static makeFunctionAccessible(func: (...args: unknown[]) => unknown) {
         const functionName = func.name; // Get the name of the function
         const capitalizedFunctionName = functionName.charAt(0).toUpperCase() + functionName.slice(1); // Capitalize the first letter of the function name
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any)[capitalizedFunctionName] = func; // Make the function available in the window object to be called in AL
     }
 }

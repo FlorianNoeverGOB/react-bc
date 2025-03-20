@@ -21,11 +21,11 @@ The template supports making functions public to be callable from the BC Control
     ```javascript
     ALHelper.makeFunctionAccessible(someGlobalFunction);
     ```
-4. In the ControlAddIn of your BC Project, define the Function (Note that first letter is capital):
+4. In the ControlAddIn of your BC Project, define the Function *(Note that first letter is capital)*:
     ```c#
     controladdin "PTE ReactBC"
     {
-        Scripts = '.scripts/react-bc.bundle.js';
+        Scripts = './addins/react-bc.bundle.js';
 
         procedure SomeGlobalFunction();
     }
@@ -38,7 +38,7 @@ The template supports calling Events that are defined in the ControlAddIn file i
     ```c#
     controladdin "PTE ReactBC"
     {
-        Scripts = '.scripts/react-bc.bundle.js';
+        Scripts = './addins/react-bc.bundle.js';
 
         event OnControlReady(Message: Text; CurrDateTime: Text);
     }
@@ -46,6 +46,9 @@ The template supports calling Events that are defined in the ControlAddIn file i
 2. Invoke the event in the React Project:
     ```javascript
     const datetime = new Date(Date.now());
-    ALHelper.invokeEvent('OnControlReady', ['Control Ready Event. Time: ', datetime.toLocaleTimeString()]);
+    ALHelper.invokeEvent('OnControlReady', 'Control Ready Event. Time: ', datetime.toLocaleTimeString());
+
+    // or skipping event if BC Environment is busy (operation is running)
+    ALHelper.invokeEventSkipBusy('OnControlReady', 'Control Ready Event. Time: ', datetime.toLocaleTimeString());
     ```
-    Note that the First parameter of the `invokeEvent` function is the name of the Event in your BC Project and the second parameter is an array of the parameters you want to call the event in BC with.
+    *Note that the First parameter of the `invokeEvent` function is the name of the Event in your BC Project. All other parameters are the variables you want to call the event in BC with.*

@@ -1,1 +1,0 @@
-Page components or views like Home, About, or Contact go here.

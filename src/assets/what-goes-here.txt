@@ -1,1 +1,0 @@
-Static files like images, fonts, or SVGs go here.

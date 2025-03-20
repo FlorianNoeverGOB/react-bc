@@ -1,50 +1,52 @@
 {
   "name": "react-bc",
-  "version": "1.0.0",
-  "description": "A template for React to use in Business Central AL",
-  "main": "index.js",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "webpack serve --config webpack/webpack.config.js --env env=dev --open",
-    "build": "webpack --config webpack/webpack.config.js --env env=prod"
+    "build": "webpack --mode production",
+    "start": "webpack serve --mode development",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix"
   },
-  "keywords": [
-    "react",
-    "typescript",
-    "webpack",
-    "business-central",
-    "bc",
-    "al",
-    "control-addin",
-    "template",
-    "template-project",
-    "react-webpack"
-  ],
-  "author": "Florian Noever",
-  "license": "MIT",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
-    "@emotion/styled": "^11.13.0",
-    "@mui/material": "^5.16.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "web-vitals": "^3.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/preset-react": "^7.24.7",
-    "@babel/preset-typescript": "^7.24.7",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "babel-loader": "^9.1.3",
-    "css-loader": "^7.1.2",
-    "dotenv-webpack": "^8.1.0",
-    "html-webpack-plugin": "^5.6.0",
-    "style-loader": "^4.0.0",
-    "terser-webpack-plugin": "^5.3.10",
-    "typescript": "^5.5.4",
-    "webpack": "^5.94.0",
+    "@eslint/compat": "^1.2.5",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "css-loader": "^6.10.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4",
-    "webpack-merge": "^6.0.1"
+    "webpack-dev-server": "^4.15.1"
   }
 }
