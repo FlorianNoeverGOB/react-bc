@@ -10,7 +10,7 @@ The bundled build result is the javascript source that can be used by BC.
 
 ## How to Call Functions from AL code
 The template supports making functions public to be callable from the BC ControlAddIn. For this you need to follow these steps:
-1. Import ALHelper class `import ALHelper from 'Utils/alHelper';`
+1. Import ALHelper class `import ALHelper from 'utils/ALHelper';`
 2. Have a function that you want to make accessible for AL Code:
     ```javascript
     function someGlobalFunction() {
@@ -51,4 +51,4 @@ The template supports calling Events that are defined in the ControlAddIn file i
     // or skipping event if BC Environment is busy (operation is running)
     ALHelper.invokeEventSkipBusy('OnControlReady', 'Control Ready Event. Time: ', datetime.toLocaleTimeString());
     ```
-    *Note that the First parameter of the `invokeEvent` function is the name of the Event in your BC Project. All other parameters are the variables you want to call the event in BC with.*
+    *Note that the First parameter of the `invokeEvent` function is the name of the Event in your BC Project. All other parameters are the variables you want to call the event in BC with. If you have your data in form of an array just use the spread operator invokeEvent('name', ...yourarray)*
