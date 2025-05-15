@@ -15,11 +15,6 @@ export default class ALHelper {
      */
     static invokeEvent(eventName: string, ...data: unknown[]): void;
 
-    /**
-     * Invokes an AL event with the specified event name. Optionally, data can be passed to the event.
-     * @param eventName - The name of the AL event to invoke.
-     * @param [data] - Optional array of arguments to pass to the AL event.
-     */
     static invokeEvent(eventName: string, ...data: unknown[]): void {
         if (data && data.length != 0) {
             this.getALMethod(eventName, false)(...data); // Call the AL method with the given name and data
