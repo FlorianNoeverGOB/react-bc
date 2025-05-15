@@ -51,4 +51,4 @@ The template supports calling Events that are defined in the ControlAddIn file i
     // or skipping event if BC Environment is busy (operation is running)
     ALHelper.invokeEventSkipBusy('OnControlReady', 'Control Ready Event. Time: ', datetime.toLocaleTimeString());
     ```
-    *Note that the First parameter of the `invokeEvent` function is the name of the Event in your BC Project. All other parameters are the variables you want to call the event in BC with. If you have your data in form of an array just use the spread operator invokeEvent('name', ...yourarray)*
+    *Note that the First parameter of the `invokeEvent` function is the name of the Event in your BC Project. All other parameters are the variables you want to call the event in BC with. If you have your data in form of an array just use the spread operator `invokeEvent('name', ...yourarray)`*
